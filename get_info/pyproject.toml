@@ -1,0 +1,21 @@
+[project]
+name = "get-stock-info"
+version = "0.1.0"
+description = "get stock info such as price, PER, PBR, and other statistics"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "backtrader>=1.9.78.123",
+    "bs4>=0.0.2",
+    "lxml>=6.0.2",
+    "matplotlib>=3.10.7",
+    "requests>=2.32.5",
+    "ta>=0.11.0",
+    "yfinance>=0.2.66",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.1.0",
+    "jupyter>=1.1.1",
+]
