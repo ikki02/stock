@@ -1,7 +1,6 @@
 import argparse
 from logging import getLogger
-import matplotlib.pyplot as plt
-import pandas as pd
+
 import ta
 import yfinance as yf
 
@@ -34,13 +33,13 @@ def check_technical_blocker(symbol: str):
     df.loc[df["SMA_5"] > df["SMA_25"], "GC_Signal"] = 1
     df.loc[df["SMA_5"] < df["SMA_25"], "GC_Signal"] = -1
     if int(df["GC_Signal"].tail(1).iloc[0]) == -1:
-        logger.warning(f"デッドクロスが検出されました")
+        logger.warning("デッドクロスが検出されました")
 
     df["RSI_Signal"] = 0
     df.loc[df["RSI"] < 30, "RSI_Signal"] = 1
     df.loc[df["RSI"] > 70, "RSI_Signal"] = -1
     if int(df["RSI_Signal"].tail(1).iloc[0]) == -1:
-        logger.warning(f"RSIが70以上です")
+        logger.warning("RSIが70以上です")
 
     df["MACD_Signal"] = 0
     df.loc[df["MACD"] > 0, "MACD_Signal"] = 1
@@ -52,7 +51,7 @@ def check_technical_blocker(symbol: str):
     df.loc[df["Close"].squeeze() < df["BB_Lower"], "BB_Signal"] = 1
     df.loc[df["Close"].squeeze() > df["BB_Upper"], "BB_Signal"] = -1
     if int(df["BB_Signal"].tail(1).iloc[0]) == -1:
-        logger.warning(f"BB_Upper以上の値上がりです")
+        logger.warning("BB_Upper以上の値上がりです")
 
 
 if __name__ == "__main__":
