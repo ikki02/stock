@@ -27,7 +27,7 @@ def calc_rsi(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         RSI列(Signal付き)を追加したDataFrame
     """
-    close = df["Close"].squeeze()
+    close = df["Close"]
     df["RSI"] = ta.momentum.RSIIndicator(close=close).rsi()
 
     df["RSI_Signal"] = 0
@@ -49,7 +49,7 @@ def calc_macd(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         MACD列(Signal付き)を追加したDataFrame
     """
-    close = df["Close"].squeeze()
+    close = df["Close"]
     df["MACD"] = ta.trend.MACD(close=close).macd()
 
     df["MACD_Signal"] = 0
@@ -77,7 +77,7 @@ def calc_bb(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         BB列(Signal付き)を追加したDataFrame
     """
-    close = df["Close"].squeeze()
+    close = df["Close"]
     df["BB_Upper"] = ta.volatility.BollingerBands(close=close).bollinger_hband()
     df["BB_Lower"] = ta.volatility.BollingerBands(close=close).bollinger_lband()
     df["BB_Mid"] = ta.volatility.BollingerBands(close=close).bollinger_mavg()

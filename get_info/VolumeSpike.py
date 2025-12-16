@@ -20,16 +20,13 @@ def main() -> None:
         symbol = row["コード"] + ".T"
         logger.info(symbol)
         df = yf.download(symbol, period="3mo", interval="1d")
+        df.columns = df.columns.get_level_values(0) # 列が銘柄のマルチインデックスのため、この2段重ねのうち、列名（0番目）だけ残したい
 
         df = calc_rsi(df)
         df = calc_macd(df)
         df = calc_bb(df)
 
         df_latest = df.tail(1)
-        # [ToDo]これは早めに持ってきたほうがよい。.squeeze()が減らせるかな。
-        # 列、銘柄のマルチインデックスになってる。この2段重ねのうち、列名（0番目）だけ残したい
-        df_latest.columns = df_latest.columns.get_level_values(0)
-
         datetime = df_latest.index[0].strftime("%Y-%m-%d %H:%M:%S")
         close = float(df_latest["Close"].iat[0])
         vol = float(df_latest["Volume"].iat[0])
