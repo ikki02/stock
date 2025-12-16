@@ -10,6 +10,5 @@ VolumeSpike.py
 - 使い方: slackの環境変数設定後、uv run VolumeSpike.py
 
 ToDo
-- 変数名整理(SLACK_WEBHOOK_URLとか)
 - technical.pyについて、np.whereとかdf.applyでわかりやすく書く。
 - 株探のassertつけたい
