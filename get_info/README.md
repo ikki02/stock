@@ -1,3 +1,7 @@
+# 環境構築
+uv sync
+
+# Pythonファイル説明
 CheckTechnicalBlocker.py
 - 銘柄を指定して、テクニカル指標(PER, PBR, 利回り, RSI, MACD, BB)を取得する
 - 望ましくない値が得られた場合はWARNING出力する
@@ -13,6 +17,7 @@ get_kabutan.py
 - PTS市場の株価上昇率ランキング(東証)を取得する
 - 出来高絞り込み
 - ローカルにcsv出力する
+- 使い方: 使いたい関数だけコメントアウトを外して、uv run get_kabutan.py
 
-ToDo
+# ToDo
 - 株探のassertつけたい
