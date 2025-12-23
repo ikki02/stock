@@ -10,5 +10,4 @@ VolumeSpike.py
 - 使い方: slackの環境変数設定後、uv run VolumeSpike.py
 
 ToDo
-- technical.pyについて、np.whereとかdf.applyでわかりやすく書く。
 - 株探のassertつけたい

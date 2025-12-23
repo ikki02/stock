@@ -83,8 +83,8 @@ def calc_bb(df: pd.DataFrame) -> pd.DataFrame:
     df["BB_Mid"] = ta.volatility.BollingerBands(close=close).bollinger_mavg()
 
     df["BB_Signal"] = 0
-    df.loc[df["Close"].squeeze() < df["BB_Lower"], "BB_Signal"] = 1
-    df.loc[df["Close"].squeeze() > df["BB_Upper"], "BB_Signal"] = -1
+    df.loc[close < df["BB_Lower"], "BB_Signal"] = 1
+    df.loc[close > df["BB_Upper"], "BB_Signal"] = -1
     if int(df["BB_Signal"].tail(1).iloc[0]) == -1:
         logger.warning("BB_Upper以上の値上がりです")
 
