@@ -9,5 +9,10 @@ VolumeSpike.py
 - slackに通知する
 - 使い方: slackの環境変数設定後、uv run VolumeSpike.py
 
+get_kabutan.py
+- PTS市場の株価上昇率ランキング(東証)を取得する
+- 出来高絞り込み
+- ローカルにcsv出力する
+
 ToDo
 - 株探のassertつけたい
