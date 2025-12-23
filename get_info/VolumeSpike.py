@@ -13,7 +13,7 @@ logger = getLogger(__name__)
 
 def main() -> None:
     args = parse_args()
-    df_vol = get_kabutan_stocks(markets=["東Ｐ", "東Ｓ", "東Ｇ", "東E"])
+    df_vol = get_kabutan_stocks(markets=["東Ｐ", "東Ｓ", "東Ｇ"])
     logger.info(f"今回の出来高急増銘柄(by株探)を{df_vol.shape[0]}件取得できました。")
 
     for index, row in df_vol.iterrows():
@@ -43,6 +43,7 @@ def main() -> None:
     銘柄コード : {symbol}
     銘柄名    : {row["銘柄名"]}
     終値      : {close:.2f}
+    株価前日比 : {row["前日比"]}
     出来高(Y!Finance)    : {int(vol)}
     出来高(株探): {row["出来高"]}
     出来高前日比率: {row["出来高前日比率"]}
