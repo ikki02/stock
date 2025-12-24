@@ -11,22 +11,23 @@ def get_kabutan_pts_stocks(
     株探（kabutan）の探索ページから銘柄一覧を取得する
 
     Args:
-        url: PTS市場の株価上昇率ランキング
+        url: PTS市場の株価上昇率ランキングや出来高ランキングのURL
         markets: 許可する市場コード（例: ["東Ｐ", "東Ｓ", "東Ｇ", "東Ｅ"]）。None の場合はフィルタしない
         volume: 出来高の下限
 
     Returns:
-        市場で絞り込まれた、PTS市場の株価上昇銘柄の一覧
+        市場と出来高で絞り込まれた、PTS市場の値上がり銘柄の一覧
     """
     # HTML内のランキング50件を取得する。for文でまわさない場合15件しか取れないため、pageパラメータを回して上位50件を取得する
     dfs = []
     for page in range(1, 3):  # 1〜4 くらいまで試す
-        url = f"https://kabutan.jp/warning/pts_night_price_increase?page={page}"
+        url = f"{url}?page={page}"
         table = pd.read_html(url)[2]  # ページ構造によってインデックス調整。# [2]に今回欲しいランキングがある。
         dfs.append(table)
     df = pd.concat(dfs, ignore_index=True)
 
-    df.columns = df.columns.get_level_values(1)  # 列が銘柄のマルチインデックスのため、この2段重ねのうち、列名（1番目）だけ残したい
+    # 列が銘柄のマルチインデックスのため、この2段重ねのうち、列名（1番目）だけ残したい
+    df.columns = df.columns.get_level_values(1)
 
     # Unnamed 列を削除
     df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
@@ -49,8 +50,8 @@ def get_kabutan_pts_stocks(
     # 必要な列だけ残す（列順も固定）
     df = df[
         [
-            "コード",
             "銘柄名",
+            "コード",
             "市場",
             "株価",
             "PTS株価",
@@ -71,7 +72,7 @@ def get_kabutan_pts_stocks(
     df = df[df["出来高"] >= volume]
 
     # PTS株価がプラスのものだけに絞る。
-    df[df["通常取引23日終値比(実数)"] > 0]
+    df = df[df["通常取引23日終値比(実数)"] > 0]
 
     return df
 
@@ -123,13 +124,16 @@ def get_kabutan_stocks(
     df = df[df["出来高"] >= volume]
 
     # 株価がプラスのものだけに絞る。
-    df[df["前日比"] > 0]
+    df = df[df["前日比"] > 0]
 
     return df
 
 
 if __name__ == "__main__":
-    df = get_kabutan_pts_stocks(markets=["東Ｐ", "東Ｓ", "東Ｇ"])
+    df = get_kabutan_pts_stocks(
+        url="https://kabutan.jp/warning/pts_night_price_increase", markets=["東Ｐ", "東Ｓ", "東Ｇ"]
+    )
+    # df = get_kabutan_pts_stocks(url="https://kabutan.jp/warning/pts_night_volume_ranking")
     # df = get_kabutan_stocks()
     print(
         df.to_string(

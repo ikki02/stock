@@ -14,8 +14,7 @@ VolumeSpike.py
 - 使い方: slackの環境変数設定後、uv run VolumeSpike.py
 
 get_kabutan.py
-- PTS市場の株価上昇率ランキング(東証)を取得する
-- 出来高絞り込み
+- 市場(東証)と出来高で絞り込まれた、PTS市場の値上がり銘柄の一覧を取得する
 - ローカルにcsv出力する
 - 使い方: 使いたい関数だけコメントアウトを外して、uv run get_kabutan.py
 
