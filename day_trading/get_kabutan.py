@@ -35,10 +35,10 @@ def get_kabutan_pts_stocks(
     # カラム名を正規化
     df = df.rename(
         columns={
-            "通常取引 23日終値": "株価",
+            "通常取引 24日終値": "株価",
             "株価": "PTS株価",
-            "通常取引 23日終値比": "通常取引23日終値比(実数)",
-            "通常取引 23日終値比.1": "通常取引23日終値比(率)",
+            "通常取引 24日終値比": "通常取引24日終値比(実数)",
+            "通常取引 24日終値比.1": "通常取引24日終値比(率)",
             "ＰＥＲ": "PER",
             "ＰＢＲ": "PBR",
         }
@@ -55,8 +55,8 @@ def get_kabutan_pts_stocks(
             "市場",
             "株価",
             "PTS株価",
-            "通常取引23日終値比(実数)",
-            "通常取引23日終値比(率)",
+            "通常取引24日終値比(実数)",
+            "通常取引24日終値比(率)",
             "出来高",
             "PER",
             "PBR",
@@ -72,15 +72,13 @@ def get_kabutan_pts_stocks(
     df = df[df["出来高"] >= volume]
 
     # PTS株価がプラスのものだけに絞る。
-    df = df[df["通常取引23日終値比(実数)"] > 0]
+    df = df[df["通常取引24日終値比(実数)"] > 0]
 
     return df
 
 
 if __name__ == "__main__":
-    df = get_kabutan_pts_stocks(
-        url="https://kabutan.jp/warning/pts_night_price_increase", markets=["東Ｐ", "東Ｓ", "東Ｇ"]
-    )
+    df = get_kabutan_pts_stocks(url="https://kabutan.jp/warning/pts_night_price_increase", markets=["東Ｐ", "東Ｓ", "東Ｇ"])
     # df = get_kabutan_pts_stocks(url="https://kabutan.jp/warning/pts_night_volume_ranking")
     print(
         df.to_string(
@@ -89,4 +87,4 @@ if __name__ == "__main__":
             max_cols=None,
         )
     )
-    df.to_csv("data/kabutan_ranking.csv", index=False)
+    df.to_csv("logs/kabutan_ranking.csv", index=False)
