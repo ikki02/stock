@@ -1,12 +1,10 @@
 import logging
-from logging import getLogger
-import re
 from typing import Iterable
 
 import pandas as pd
 
 logging.basicConfig(level=logging.INFO)
-logger = getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def get_kabutan_pts_stocks(
@@ -41,8 +39,7 @@ def get_kabutan_pts_stocks(
 
     # 取得日に依存するカラム名の抽出
     pattern = r"通常取引\s*(\d+)日終値.*"
-    extract_day_columns = list(df.columns[df.columns.str.contains(pattern)])
-    day = re.match(pattern, extract_day_columns[0]).group(1)
+    day = df.columns.str.extract(pattern, expand=False).dropna()[0]
     logger.info(f"{day}日の終値を取得しています。")
 
     # カラム名を正規化
