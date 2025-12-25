@@ -27,8 +27,8 @@ def get_kabutan_pts_stocks(
     """
     # HTML内のランキング50件を取得する。for文でまわさない場合15件しか取れないため、pageパラメータを回して上位50件を取得する
     dfs = []
-    for page in range(1, 3):  # 1〜4 くらいまで試す
-        url = f"{url}?page={page}"
+    for page in range(1, 3):  # 1〜3 くらいまで試す
+        url = f"{url}?dispmode=normal&page={page}"  # デフォルトクエリパラメータ解説: "dispmode=normal" = 表示モード
         table = pd.read_html(url)[2]  # ページ構造によってインデックス調整。# [2]に今回欲しいランキングがある。
         dfs.append(table)
     df = pd.concat(dfs, ignore_index=True)

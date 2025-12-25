@@ -10,5 +10,4 @@ get_kabutan.py
 - 使い方: 使いたい関数だけコメントアウトを外して、`% uv run get_kabutan.py`
 
 # ToDo
-- Pagenationがうまくいってない
 - 株探のassertつけたい
