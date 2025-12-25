@@ -1,5 +1,12 @@
+import logging
+from logging import getLogger
+import re
 from typing import Iterable
+
 import pandas as pd
+
+logging.basicConfig(level=logging.INFO)
+logger = getLogger(__name__)
 
 
 def get_kabutan_pts_stocks(
@@ -32,20 +39,23 @@ def get_kabutan_pts_stocks(
     # Unnamed 列を削除
     df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
 
+    # 取得日に依存するカラム名の抽出
+    pattern = r"通常取引\s*(\d+)日終値.*"
+    extract_day_columns = list(df.columns[df.columns.str.contains(pattern)])
+    day = re.match(pattern, extract_day_columns[0]).group(1)
+    logger.info(f"{day}日の終値を取得しています。")
+
     # カラム名を正規化
     df = df.rename(
         columns={
-            "通常取引 24日終値": "株価",
+            f"通常取引 {day}日終値": "株価",
             "株価": "PTS株価",
-            "通常取引 24日終値比": "通常取引24日終値比(実数)",
-            "通常取引 24日終値比.1": "通常取引24日終値比(率)",
+            f"通常取引 {day}日終値比": f"通常取引{day}日終値比(実数)",
+            f"通常取引 {day}日終値比.1": f"通常取引{day}日終値比(率)",
             "ＰＥＲ": "PER",
             "ＰＢＲ": "PBR",
         }
     )
-
-    for col in ["PER", "PBR", "利回り"]:
-        df[col] = pd.to_numeric(df[col], errors="coerce")
 
     # 必要な列だけ残す（列順も固定）
     df = df[
@@ -55,14 +65,17 @@ def get_kabutan_pts_stocks(
             "市場",
             "株価",
             "PTS株価",
-            "通常取引24日終値比(実数)",
-            "通常取引24日終値比(率)",
+            f"通常取引{day}日終値比(実数)",
+            f"通常取引{day}日終値比(率)",
             "出来高",
             "PER",
             "PBR",
             "利回り",
         ]
     ]
+
+    for col in ["株価", "PTS株価", "PER", "PBR", "利回り"]:
+        df[col] = pd.to_numeric(df[col], errors="coerce")
 
     # 市場で絞る
     if markets is not None:
@@ -72,7 +85,7 @@ def get_kabutan_pts_stocks(
     df = df[df["出来高"] >= volume]
 
     # PTS株価がプラスのものだけに絞る。
-    df = df[df["通常取引24日終値比(実数)"] > 0]
+    df = df[df[f"通常取引{day}日終値比(実数)"] > 0]
 
     return df
 
